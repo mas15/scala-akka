@@ -13,7 +13,8 @@ object Main extends App {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   import system.dispatcher
 
-  val router = new AppRouter()
+  val service = system.actorOf(Service.props(), "service")
+  val router = new AppRouter(service)
   val server = new Server(router, host, port)
 
   val binding = server.bind()

@@ -1,10 +1,12 @@
+import Service.{ServiceMsg, EchoRequest, RealRootRequest}
+
 trait Validator[T] {
   def validate(t: T): Option[ApiError]
 }
 
-object ApiRequestValidator extends Validator[ApiRequest] {
+object ApiRequestValidator extends Validator[ServiceMsg] {
 
-  def validate(apiRequest: ApiRequest): Option[ApiError] = {
+  def validate(apiRequest: ServiceMsg): Option[ApiError] = {
     apiRequest match {
       case apiRequest: EchoRequest => validateEcho(apiRequest)
       case apiRequest: RealRootRequest => validateRealRoot(apiRequest)
