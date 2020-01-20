@@ -1,5 +1,6 @@
 import Service._
 import akka.actor.ActorRef
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.pattern.ask
 import akka.util.Timeout
@@ -27,7 +28,7 @@ class AppRouter(service: ActorRef) extends Router with Directives with ApiReques
               r match {
                 case r: RealRootRequest => (service ? r).mapTo[RealRootResponse]
                 case r: EchoRequest => (service ? r).mapTo[EchoResponse]
-                case r: PingRequest => (service ? r).mapTo[PingResponse]
+                case r: PingRequest => (StatusCodes.NoContent, (service ? r).mapTo[PingResponse])
                 case _ => new NotImplementedError()
               }
             }

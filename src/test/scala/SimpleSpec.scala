@@ -34,7 +34,7 @@ class SimpleSpec extends WordSpecLike with Matchers with ScalatestRouteTest {
 
     "return 204 when ping" in {
       Post("/", testPing) ~> router.route ~> check {
-        status shouldBe StatusCodes.OK
+        status shouldBe StatusCodes.NoContent
       }
     }
 
