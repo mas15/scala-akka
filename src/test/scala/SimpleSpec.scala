@@ -1,8 +1,6 @@
 
-import akka.actor.ActorRef
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import akka.testkit.TestKit
 import org.scalatest.{Matchers, WordSpecLike}
 
 class SimpleSpec extends WordSpecLike with Matchers with ScalatestRouteTest {
@@ -10,17 +8,12 @@ class SimpleSpec extends WordSpecLike with Matchers with ScalatestRouteTest {
   import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
   import io.circe.generic.auto._
 
-  override def afterAll: Unit = {
-    TestKit.shutdownActorSystem(system)
-  }
+  val testPing: GenericApiRequest = GenericApiRequest(kind = "ping", message = None, index = None, radicand = None)
+  val testEcho: GenericApiRequest = GenericApiRequest(kind = "echo", message = Some("halko"), index = None, radicand = None)
+  val testRealRoot: GenericApiRequest = GenericApiRequest(kind = "realRoot", message = None, index = Some(2), radicand = Some(16))
+  val testWrongReq: GenericApiRequest = GenericApiRequest(kind = "echo", message = None, index = None, radicand = None)
 
-  val testPing: ApiRequest = ApiRequest(kind = "ping", message = None, index = None, radicand = None)
-  val testEcho: ApiRequest = ApiRequest(kind = "echo", message = Some("halko"), index = None, radicand = None)
-  val testRealRoot: ApiRequest = ApiRequest(kind = "realRoot", message = None, index = Some(2), radicand = Some(16))
-  val testWrongReq: ApiRequest = ApiRequest(kind = "echo", message = None, index = None, radicand = None)
-
-  val service: ActorRef = system.actorOf(Service.props(), "service")
-  val router = new AppRouter(service)
+  val router = new AppRouter()
 
   "This great api" should {
 
