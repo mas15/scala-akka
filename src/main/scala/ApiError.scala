@@ -7,6 +7,8 @@ object ApiError {
 
   val generic: ApiError = new ApiError(StatusCodes.InternalServerError, "Unknown error.")
 
+  val badRequest: ApiError = new ApiError(StatusCodes.BadRequest, "Response has got wrong format")
+
   val notPositiveValue: ApiError = new ApiError(StatusCodes.BadRequest, "Value has to be greater than 0.")
 
   val tooLongMessage: ApiError = new ApiError(StatusCodes.BadRequest, "Message is too long")

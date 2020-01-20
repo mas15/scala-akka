@@ -17,6 +17,7 @@ class SimpleSpec extends WordSpecLike with Matchers with ScalatestRouteTest {
   val testPing: ApiRequest = ApiRequest(kind = "ping", message = None, index = None, radicand = None)
   val testEcho: ApiRequest = ApiRequest(kind = "echo", message = Some("halko"), index = None, radicand = None)
   val testRealRoot: ApiRequest = ApiRequest(kind = "realRoot", message = None, index = Some(2), radicand = Some(16))
+  val testWrongReq: ApiRequest = ApiRequest(kind = "echo", message = None, index = None, radicand = None)
 
   val service: ActorRef = system.actorOf(Service.props(), "service")
   val router = new AppRouter(service)
@@ -42,6 +43,12 @@ class SimpleSpec extends WordSpecLike with Matchers with ScalatestRouteTest {
         status shouldBe StatusCodes.OK
         val resp = responseAs[RealRootResponse]
         resp.realRoot shouldBe 4.toDouble
+      }
+    }
+
+    "return 400 when request data is not correct" in {
+      Post("/", testWrongReq) ~> router.route ~> check {
+        status shouldBe StatusCodes.BadRequest
       }
     }
   }
