@@ -1,4 +1,4 @@
-name := "akkahttp-quickstart"
+name := "akka-rest-api"
 
 version := "0.1"
 
