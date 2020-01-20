@@ -1,13 +1,15 @@
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.Await
 import scala.util.{Failure, Success}
 
 object Main extends App {
 
-  val host = "0.0.0.0"
-  val port = 9000
+  val config = ConfigFactory.load()
+  val host = config.getString("http.host")
+  val port = config.getInt("http.port")
 
   implicit val system: ActorSystem = ActorSystem(name = "system")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
