@@ -13,7 +13,8 @@ class SimpleSpec extends WordSpecLike with Matchers with ScalatestRouteTest {
   val testRealRoot: GenericApiRequest = GenericApiRequest(kind = "realRoot", message = None, index = Some(2), radicand = Some(16))
   val testWrongReq: GenericApiRequest = GenericApiRequest(kind = "echo", message = None, index = None, radicand = None)
 
-  val router = new AppRouter()
+  val service = new ExampleService
+  val router = new AppRouter(service)
 
   "This great api" should {
 

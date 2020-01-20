@@ -1,8 +1,10 @@
+import java.util.concurrent.Executors
+
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import com.typesafe.config.ConfigFactory
 
-import scala.concurrent.{Await, ExecutionContextExecutor}
+import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor}
 import scala.util.{Failure, Success}
 
 object Main {
@@ -14,9 +16,11 @@ object Main {
 
     implicit val system: ActorSystem = ActorSystem(name = "system")
     implicit val materializer: ActorMaterializer = ActorMaterializer()
-    implicit val executionContext: ExecutionContextExecutor = system.dispatcher
+    implicit val executionContext: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(8))
 
-    val router = new AppRouter
+
+    val service = new ExampleService
+    val router = new AppRouter(service)
     val server = new Server(router, host, port)
 
     val binding = server.bind()
